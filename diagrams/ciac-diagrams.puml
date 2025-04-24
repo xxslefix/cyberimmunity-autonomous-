@@ -1,0 +1,79 @@
+@startuml "Базовый сценарий"
+
+title "Базовый сценарий поездки"
+
+actor "Оператор" as op
+participant "Система\nпланирования заданий" as planner
+participant "1. Связь" as conn
+participant "3. Система\nуправления" as control
+participant "2. Датчики" as sensors
+participant "4. Навигация" as nav 
+participant "5. Приводы\nгруза" as servos_cargo
+participant "6. Приводы\nдвижения" as servos_drive
+
+autonumber
+
+group Планирование и начало поездки
+    op -> planner: новое задание\nи ограничения    
+    planner -> conn: новое задание\nи ограничения
+    conn -> control: новое задание\nи ограничения
+    nav -> control: текущие координаты
+    sensors -> control: измерения и\nналичие препятствий
+end 
+loop Поездка
+    control -> control: расчёт управления
+    alt если уже в пункте назначения
+        control -> servos_cargo: оставить груз
+    else если ещё нет, нужно ехать
+        control -> servos_drive: управление
+        servos_drive -> servos_drive: исполнение
+        control <- nav: текущие координаты
+        sensors -> control: измерения и\nналичие препятствий
+    end
+end    
+
+
+@enduml
+
+@startuml "Базовый сценарий c ограничителем"
+
+title "Базовый сценарий поездки с ограничителем"
+
+actor "Оператор" as op
+participant "Система\nпланирования заданий" as planner
+participant "1. Связь" as conn
+participant "3. Система\nуправления" as control
+participant "7. Блок\nбезопасности" as safety_block
+participant "2. Датчики" as sensors
+participant "4. Навигация" as nav 
+participant "5. Приводы\nгруза" as servos_cargo
+participant "6. Приводы\nдвижения" as servos_drive
+
+autonumber
+
+group Планирование и начало поездки
+    op -> planner: новое задание\nи ограничения    
+    planner -> conn: новое задание\nи ограничения
+    conn -> control: новое задание\nи ограничения
+    conn -> safety_block: новое задание\nи ограничения
+    nav -> control: текущие координаты
+    nav -> safety_block: текущие координаты
+    sensors -> control: измерения и\nналичие препятствий
+end 
+loop Поездка
+    control -> control: расчёт управления
+    alt если уже в пункте назначения
+        control -> servos_cargo: оставить груз
+    else если ещё нет, нужно ехать
+        control -> safety_block: управление
+        safety_block -> safety_block: проверка сигналов на безопасность
+        safety_block -> servos_drive: управление
+        servos_drive -> servos_drive: исполнение
+        control <- nav: текущие координаты
+        safety_block <- nav: текущие координаты
+        sensors -> control: измерения и\nналичие препятствий
+    end
+end    
+
+
+@enduml

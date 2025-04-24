@@ -1,0 +1,17 @@
+{
+    "version": "0.2",
+    "ignorePaths": [],
+    "dictionaryDefinitions": [],
+    "dictionaries": [],
+    "words": [
+        "afcs",
+        "kmph",
+        "nbconvert",
+        "paho"
+    ],
+    "ignoreWords": [
+        "recalc",
+        "киберпрепятствий"
+    ],
+    "import": []
+}

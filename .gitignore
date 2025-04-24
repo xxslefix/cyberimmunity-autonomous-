@@ -1,0 +1,10 @@
+out/**
+__pycache__
+.pytest_cache
+*.bkp
+logs
+.vscode
+tests/e2e/*.wpl
+*.wpl
+cyberimmunity--autonomous-car*.pdf
+out
